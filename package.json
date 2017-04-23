@@ -1,0 +1,19 @@
+{
+  "name": "jfdcomponents",
+  "version": "1.0.0",
+  "description": "Reusable component repository for my projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfdesrochers/jfdcomponents.git"
+  },
+  "author": "Jean-Francois Desrochers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jfdesrochers/jfdcomponents/issues"
+  },
+  "homepage": "https://github.com/jfdesrochers/jfdcomponents#readme"
+}
