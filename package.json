@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/jfdesrochers/jfdcomponents/issues"
   },
-  "homepage": "https://github.com/jfdesrochers/jfdcomponents#readme"
+  "homepage": "https://github.com/jfdesrochers/jfdcomponents#readme",
+  "devDependencies": {}
 }
