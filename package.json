@@ -1,6 +1,6 @@
 {
   "name": "jfdcomponents",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable component repository for my projects",
   "main": "index.js",
   "scripts": {
