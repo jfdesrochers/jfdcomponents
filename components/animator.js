@@ -35,7 +35,6 @@ const Animator = function (namespace) {
         
         if (lastNode) {
             let direction = getDirection(vnode.key, lastNode.key)
-            console.log(history, direction)
             let lastElem = lastNode.dom
             let uncompleted = true
 
