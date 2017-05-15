@@ -50,7 +50,8 @@ module.exports.ValidationManager = ValidationManager
  * @param options.onchange(text) Function called if selection changes. text contains new the new field value.
  * @param options.stdMessage Message to be displayed in the default state (e.g. help text)
  * @param options.errMessage Message to be displayed in case of failed validation
- * @param options.showValid indicates whether or not to show feedback if the field is valid (default: false)
+ * @param options.showValid Indicates whether or not to show feedback if the field is valid (default: false)
+ * @param options.defaultValue Value to be displayed in the field upon creation.
  * @param {ValidationManager} options.fields pass a ValidationManager, will add an object containing methods validate, reset and the fieldValue to a key named after the fieldname
  * @param fields.validate() starts validation using the first available method in that order:
     1. If you explicitely specify a validation state and message as parameters, they will be used as is
@@ -64,7 +65,7 @@ const ValidatingInput = {}
 ValidatingInput.oninit = function (vnode) {
     const options = vnode.attrs.options
     options.showValid = options.showValid || false
-    options.fields.fields[options.name] = {value: ''}
+    options.fields.fields[options.name] = {value: options.defaultValue || ''}
     options.fields.fields[options.name].reset = () => {
         this.hasValidation = false
         this.isValid = false
@@ -122,6 +123,7 @@ module.exports.ValidatingInput = ValidatingInput
  * @param options.stdMessage Message to be displayed in the default state (e.g. help text)
  * @param options.errMessage Message to be displayed in case of failed validation
  * @param options.showValid indicates whether or not to show feedback if the field is valid (default: false)
+ * @param options.defaultValue Value to be displayed in the field upon creation.
  * @param {ValidationManager} options.fields pass a ValidationManager, will add an object containing methods validate, reset and the fieldValue to a key named after the fieldname
  * @param fields.validate() starts validation. you must have provided onvalidate function for it to work.
  * @param fields.reset() resets the validation state to default
@@ -132,8 +134,7 @@ const ValidatingSelect = {}
 ValidatingSelect.oninit = function (vnode) {
     const options = vnode.attrs.options
     options.showValid = options.showValid || false
-    options.default = options.default === undefined ? -1 : options.default
-    options.fields[options.name] = {value: ''}
+    options.fields[options.name] = {value: options.defaultValue || ''}
     options.fields[options.name].reset = () => {
         this.hasValidation = false
         this.isValid = false
