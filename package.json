@@ -1,6 +1,6 @@
 {
   "name": "jfdcomponents",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Reusable component repository for my projects",
   "main": "index.js",
   "scripts": {
@@ -16,5 +16,8 @@
     "url": "https://github.com/jfdesrochers/jfdcomponents/issues"
   },
   "homepage": "https://github.com/jfdesrochers/jfdcomponents#readme",
+  "dependencies": {
+    "js-yaml": "^3.8.3"
+  }
   "devDependencies": {}
 }
