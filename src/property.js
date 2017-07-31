@@ -1,5 +1,3 @@
-'use strict';
-
 ///////////////////////////
 // Property
 // Defines a basic getter/setter
@@ -16,20 +14,20 @@
  * @param {*} defaultProp - Default value for the property. Mandatory.
  * @param {function} callback - Callback to be called if the property is changed.
  */
-var Property = function Property(defaultProp, callback) {
-    var curValue = defaultProp;
+const Property = function (defaultProp, callback) {
+    let curValue = defaultProp
     return function (propValue) {
         if (propValue !== undefined) {
-            var oldValue = curValue;
+            let oldValue = curValue
             if (typeof callback === 'function') {
                 if (callback(propValue, oldValue) === false) {
-                    return curValue;
+                    return curValue
                 }
             }
-            curValue = propValue;
+            curValue = propValue
         }
-        return curValue;
-    };
-};
+        return curValue
+    }
+}
 
-module.exports = Property;
+module.exports = Property

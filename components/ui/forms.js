@@ -1,5 +1,6 @@
-const m = require('mithril')
+'use strict';
 
+var m = require('mithril');
 
 /**
  * Holds the values and validation functions of Validating form fields
@@ -9,33 +10,33 @@ const m = require('mithril')
  * @method allReset Resets all the form elements to default validation state. Does not clear the value.
  * @method allValues Returns an object containing all the values of the form elements in the form {fieldname: fieldvalue}
  */
-const ValidationManager = function () {
+var ValidationManager = function ValidationManager() {
     return {
         fields: {},
-        allValid: function () {
-            let valid = true
-            for (let k in this.fields) {
+        allValid: function allValid() {
+            var valid = true;
+            for (var k in this.fields) {
                 if (!this.fields[k].validate()) {
-                    valid = false
+                    valid = false;
                 }
             }
-            return valid
+            return valid;
         },
-        allReset: function () {
-            for (let k in this.fields) {
-                this.fields[k].reset()
+        allReset: function allReset() {
+            for (var k in this.fields) {
+                this.fields[k].reset();
             }
         },
-        allValues: function () {
-            let vals = {}
-            for (let k in this.fields) {
-                vals[k] = this.fields[k].value
+        allValues: function allValues() {
+            var vals = {};
+            for (var k in this.fields) {
+                vals[k] = this.fields[k].value;
             }
         }
-    }
-}
+    };
+};
 
-module.exports.ValidationManager = ValidationManager
+module.exports.ValidationManager = ValidationManager;
 
 /**
  * ValidatingInput
@@ -60,55 +61,52 @@ module.exports.ValidationManager = ValidationManager
  * @param fields.reset() resets the validation state to default
  * @param fields.value holds the field value
  */
-const ValidatingInput = {}
+var ValidatingInput = {};
 
 ValidatingInput.oninit = function (vnode) {
-    const options = vnode.attrs.options
-    options.showValid = options.showValid || false
-    options.fields.fields[options.name] = {value: options.defaultValue || ''}
-    options.fields.fields[options.name].reset = () => {
-        this.hasValidation = false
-        this.isValid = false
-        this.validMessage = options.stdMessage || ''
-        m.redraw()
-    }
-    options.fields.fields[options.name].validate = (valid, message) => {
-        if ((valid !== undefined) && (message !== undefined)) {
-            this.isValid = valid
-            this.validMessage = this.isValid ? (options.showValid ? '' : options.stdMessage || '') : message || ''
+    var _this = this;
+
+    var options = vnode.attrs.options;
+    options.showValid = options.showValid || false;
+    options.fields.fields[options.name] = { value: options.defaultValue || '' };
+    options.fields.fields[options.name].reset = function () {
+        _this.hasValidation = false;
+        _this.isValid = false;
+        _this.validMessage = options.stdMessage || '';
+        m.redraw();
+    };
+    options.fields.fields[options.name].validate = function (valid, message) {
+        if (valid !== undefined && message !== undefined) {
+            _this.isValid = valid;
+            _this.validMessage = _this.isValid ? options.showValid ? '' : options.stdMessage || '' : message || '';
         } else if (typeof options.onvalidate === 'function') {
-            this.isValid = options.onvalidate(options.fields.fields[options.name].value)
-            this.validMessage = this.isValid ? (options.showValid ? '' : options.stdMessage || '') : options.errMessage || ''
+            _this.isValid = options.onvalidate(options.fields.fields[options.name].value);
+            _this.validMessage = _this.isValid ? options.showValid ? '' : options.stdMessage || '' : options.errMessage || '';
         } else {
-            let pattern = options.validPattern || /.*/gi
-            this.isValid = options.fields.fields[options.name].value.match(pattern)
-            this.validMessage = this.isValid ? (options.showValid ? '' : options.stdMessage || '') : options.errMessage || ''
+            var pattern = options.validPattern || /.*/gi;
+            _this.isValid = options.fields.fields[options.name].value.match(pattern);
+            _this.validMessage = _this.isValid ? options.showValid ? '' : options.stdMessage || '' : options.errMessage || '';
         }
-        this.hasValidation =  this.isValid ? options.showValid : true
-        m.redraw()
-        return this.isValid
-    }
-    this.hasValidation = false
-    this.isValid = false
-    this.validMessage = options.stdMessage || ''
-    this.fieldValue = options.fieldValue
-    this.fieldChange = (e) => {
-        if (typeof options.onchange === 'function') options.onchange(e.target.value)
-        options.fields.fields[options.name].value = e.target.value
-    }
-}
+        _this.hasValidation = _this.isValid ? options.showValid : true;
+        m.redraw();
+        return _this.isValid;
+    };
+    this.hasValidation = false;
+    this.isValid = false;
+    this.validMessage = options.stdMessage || '';
+    this.fieldValue = options.fieldValue;
+    this.fieldChange = function (e) {
+        if (typeof options.onchange === 'function') options.onchange(e.target.value);
+        options.fields.fields[options.name].value = e.target.value;
+    };
+};
 
 ValidatingInput.view = function (vnode) {
-    const options = vnode.attrs.options
-    return m('div.form-group' + (this.hasValidation ? '.has-feedback' + (this.isValid ? '.has-success' : '.has-error') : ''), [
-                m('label.control-label', {for: options.name}, options.label),
-                m('input.form-control#' + options.name, {type: options.type, onchange: this.fieldChange, value: options.fields.fields[options.name].value}),
-                this.hasValidation ? m('span.glyphicon.form-control-feedback' + (this.isValid ? '.glyphicon-ok' : '.glyphicon-remove')) : '',
-                this.validMessage !== '' ? m('span.help-block', this.validMessage) : ''
-            ])
-}
+    var options = vnode.attrs.options;
+    return m('div.form-group' + (this.hasValidation ? '.has-feedback' + (this.isValid ? '.has-success' : '.has-error') : ''), [m('label.control-label', { for: options.name }, options.label), m('input.form-control#' + options.name, { type: options.type, onchange: this.fieldChange, value: options.fields.fields[options.name].value }), this.hasValidation ? m('span.glyphicon.form-control-feedback' + (this.isValid ? '.glyphicon-ok' : '.glyphicon-remove')) : '', this.validMessage !== '' ? m('span.help-block', this.validMessage) : '']);
+};
 
-module.exports.ValidatingInput = ValidatingInput
+module.exports.ValidatingInput = ValidatingInput;
 
 /**
  * ValidatingSelect
@@ -129,51 +127,47 @@ module.exports.ValidatingInput = ValidatingInput
  * @param fields.reset() resets the validation state to default
  * @param fields.value holds the field value
  */
-const ValidatingSelect = {}
+var ValidatingSelect = {};
 
 ValidatingSelect.oninit = function (vnode) {
-    const options = vnode.attrs.options
-    options.showValid = options.showValid || false
-    options.fields[options.name] = {value: options.defaultValue || ''}
-    options.fields[options.name].reset = () => {
-        this.hasValidation = false
-        this.isValid = false
-        this.validMessage = options.stdMessage || ''
-        m.redraw()
-    }
-    options.fields[options.name].validate = (valid, message) => {
-        if ((valid !== undefined) && (message !== undefined)) {
-            this.isValid = valid
-            this.validMessage = this.isValid ? (options.showValid ? '' : options.stdMessage || '') : message || ''
+    var _this2 = this;
+
+    var options = vnode.attrs.options;
+    options.showValid = options.showValid || false;
+    options.fields[options.name] = { value: options.defaultValue || '' };
+    options.fields[options.name].reset = function () {
+        _this2.hasValidation = false;
+        _this2.isValid = false;
+        _this2.validMessage = options.stdMessage || '';
+        m.redraw();
+    };
+    options.fields[options.name].validate = function (valid, message) {
+        if (valid !== undefined && message !== undefined) {
+            _this2.isValid = valid;
+            _this2.validMessage = _this2.isValid ? options.showValid ? '' : options.stdMessage || '' : message || '';
         } else if (typeof options.onvalidate === 'function') {
-            this.isValid = options.onvalidate(options.fields.fields[options.name].value)
-            this.validMessage = this.isValid ? (options.showValid ? '' : options.stdMessage || '') : options.errMessage || ''
+            _this2.isValid = options.onvalidate(options.fields.fields[options.name].value);
+            _this2.validMessage = _this2.isValid ? options.showValid ? '' : options.stdMessage || '' : options.errMessage || '';
         }
-        this.hasValidation =  this.isValid ? options.showValid : true
-        m.redraw()
-        return this.isValid
-    }
-    this.hasValidation = false
-    this.isValid = false
-    this.validMessage = options.stdMessage || ''
-    this.fieldValue = options.fieldValue
-    this.fieldChange = (e) => {
-        if (typeof options.onchange === 'function') options.onchange(e.target.value)
-        options.fields.fields[options.name].value = e.target.value
-    }
-}
+        _this2.hasValidation = _this2.isValid ? options.showValid : true;
+        m.redraw();
+        return _this2.isValid;
+    };
+    this.hasValidation = false;
+    this.isValid = false;
+    this.validMessage = options.stdMessage || '';
+    this.fieldValue = options.fieldValue;
+    this.fieldChange = function (e) {
+        if (typeof options.onchange === 'function') options.onchange(e.target.value);
+        options.fields.fields[options.name].value = e.target.value;
+    };
+};
 
 ValidatingSelect.view = function (vnode) {
-    const options = vnode.attrs.options
-    return m('div.form-group' + (this.hasValidation ? '.has-feedback' + (this.isValid ? '.has-success' : '.has-error') : ''), [
-                m('label.control-label', {for: options.name}, options.label),
-                m('select.form-control#' + options.name, {onchange: this.fieldChange}, 
-                    options.choices.map((item) => {
-                        return m('option', {value: item[0], selected: (item[0] === options.fields.fields[options.name].value)}, item[1])
-                    })
-                ),
-                this.validMessage !== '' ? m('span.help-block', this.validMessage) : ''
-            ])
-}
+    var options = vnode.attrs.options;
+    return m('div.form-group' + (this.hasValidation ? '.has-feedback' + (this.isValid ? '.has-success' : '.has-error') : ''), [m('label.control-label', { for: options.name }, options.label), m('select.form-control#' + options.name, { onchange: this.fieldChange }, options.choices.map(function (item) {
+        return m('option', { value: item[0], selected: item[0] === options.fields.fields[options.name].value }, item[1]);
+    })), this.validMessage !== '' ? m('span.help-block', this.validMessage) : '']);
+};
 
-module.exports.ValidatingSelect = ValidatingSelect
+module.exports.ValidatingSelect = ValidatingSelect;
